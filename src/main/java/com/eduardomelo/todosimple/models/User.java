@@ -12,6 +12,10 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 import java.util.Objects;
 
 //import org.springframework.scheduling.config.Task;
@@ -34,6 +38,8 @@ public class User {
     @NotNull(groups = CreateUser.class)
     @Size(groups = CreateUser.class, min = 2, max = 100)
     private String username;
+
+    @JsonProperty(access = Access.WRITE_ONLY)
     @Column(name = "password", length = 60, nullable = false)
     @NotEmpty(groups = {CreateUser.class, UpdateUser.class})
     @NotNull(groups = {CreateUser.class, UpdateUser.class})
