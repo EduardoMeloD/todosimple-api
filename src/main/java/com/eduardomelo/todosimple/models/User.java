@@ -22,6 +22,7 @@ import java.util.Objects;
 import com.eduardomelo.todosimple.models.Task;
 
 
+
 @Entity
 @Table(name = User.TABLE_NAME)
 public class User {
