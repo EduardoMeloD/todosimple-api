@@ -29,7 +29,7 @@ public class User {
     
     public static final String TABLE_NAME = "user";
 
-    public interface CreateUser { }
+    public interface CreateUser {}
     public interface UpdateUser {}
 
     @Id
