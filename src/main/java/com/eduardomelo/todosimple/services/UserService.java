@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.eduardomelo.todosimple.models.User;
-import com.eduardomelo.todosimple.repositories.TaskRepository;
 import com.eduardomelo.todosimple.repositories.UserRepository;
 
 @Service
@@ -15,8 +14,7 @@ public class UserService {
     
     @Autowired // serve como construtor para classes que sao interfaces
     private UserRepository userRepository;
-    @Autowired
-    private TaskRepository taskRepository;
+    ;
     
     public User BuscarUsuario(Long id){
 
@@ -29,7 +27,6 @@ public class UserService {
     public User CriarUsuario(User obj){
         obj.setId(null); // evita que o usuario crie um login com id existente e acabe por conseguir alterar o user
         obj = this.userRepository.save(obj);
-        this.taskRepository.saveAll(obj.getTasks());
         return obj;
     }
 
