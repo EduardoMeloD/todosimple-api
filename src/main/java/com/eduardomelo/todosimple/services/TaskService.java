@@ -1,5 +1,6 @@
 package com.eduardomelo.todosimple.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,11 @@ public class TaskService {
         obj.setUser(user);
         obj = this.taskRepository.save(obj);
         return obj;
+    }
+
+    public List<Task> listarTodasAsTask(Long userId){
+        List<Task> task = this.taskRepository.findByUser_id(userId);
+        return task;
     }
     
     @Transactional
