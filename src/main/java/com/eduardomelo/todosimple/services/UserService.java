@@ -17,7 +17,6 @@ public class UserService {
     ;
     
     public User BuscarUsuario(Long id){
-
         //optinal serve para retornar vazio ao inves de null quando nao existe um usuario
         Optional<User> user = this.userRepository.findById(id); // findById esta sendo pego do Jpa
         return user.orElseThrow(() -> new RuntimeException("usuario nao encontrado"));

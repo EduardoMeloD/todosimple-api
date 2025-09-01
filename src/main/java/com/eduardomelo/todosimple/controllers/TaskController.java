@@ -20,6 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.eduardomelo.todosimple.models.Task;
 import com.eduardomelo.todosimple.services.TaskService;
+import com.eduardomelo.todosimple.services.UserService;
 
 @RestController
 @RequestMapping("/task")
@@ -28,6 +29,8 @@ public class TaskController {
     
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/{id}")
     public ResponseEntity<Task> findTaskById(@PathVariable Long id){
@@ -37,6 +40,7 @@ public class TaskController {
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Task>> findAllTask(@PathVariable Long userId){
+        this.userService.BuscarUsuario(userId);
         List<Task> objs = this.taskService.listarTodasAsTask(userId);
         return ResponseEntity.ok().body(objs);
     }
