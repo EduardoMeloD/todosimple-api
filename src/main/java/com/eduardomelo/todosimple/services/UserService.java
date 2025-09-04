@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.eduardomelo.todosimple.models.User;
 import com.eduardomelo.todosimple.repositories.UserRepository;
+import com.eduardomelo.todosimple.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class UserService {
@@ -19,7 +20,7 @@ public class UserService {
     public User BuscarUsuario(Long id){
         //optinal serve para retornar vazio ao inves de null quando nao existe um usuario
         Optional<User> user = this.userRepository.findById(id); // findById esta sendo pego do Jpa
-        return user.orElseThrow(() -> new RuntimeException("usuario nao encontrado"));
+        return user.orElseThrow(() -> new ObjectNotFoundException("usuario nao encontrado"));
     }
 
     @Transactional // usado para funçoes que vao inserir dados no banco de dados, evita erro de enviar somente uma parte das informaçoes
