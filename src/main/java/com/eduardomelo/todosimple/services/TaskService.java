@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.eduardomelo.todosimple.models.Task;
 import com.eduardomelo.todosimple.models.User;
 import com.eduardomelo.todosimple.repositories.TaskRepository;
+import com.eduardomelo.todosimple.services.exceptions.DataBindingViolationException;
 import com.eduardomelo.todosimple.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -54,7 +55,7 @@ public class TaskService {
         try {
             this.taskRepository.deleteById(id);
         } catch (Exception e) {
-            throw new RuntimeException("nao é possivel excluir pois essa entidade esta relacionada com outras");
+            throw new DataBindingViolationException("nao é possivel excluir pois essa entidade esta relacionada com outras");
         }
     }
 }

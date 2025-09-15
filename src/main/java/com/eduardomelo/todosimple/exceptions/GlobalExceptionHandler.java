@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.eduardomelo.todosimple.services.exceptions.DataBindingViolationException;
 import com.eduardomelo.todosimple.services.exceptions.ObjectNotFoundException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -91,6 +92,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 HttpStatus.NOT_FOUND,
                 request);
     }
+
+    @ExceptionHandler(DataBindingViolationException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseEntity<Object> handleDataBindingViolationException(
+            DataBindingViolationException dataBindingViolationException,
+            WebRequest request) {
+        log.error("Failed to save entity with associated data", dataBindingViolationException);
+        return buildErrorResponse(
+                dataBindingViolationException,
+                HttpStatus.CONFLICT,
+                request);
+            }
 
         private ResponseEntity<Object> buildErrorResponse(
             Exception exception,

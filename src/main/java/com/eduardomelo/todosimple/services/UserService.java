@@ -1,17 +1,25 @@
 package com.eduardomelo.todosimple.services;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.eduardomelo.todosimple.models.User;
+import com.eduardomelo.todosimple.models.enums.ProfileEnum;
 import com.eduardomelo.todosimple.repositories.UserRepository;
+import com.eduardomelo.todosimple.services.exceptions.DataBindingViolationException;
 import com.eduardomelo.todosimple.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class UserService {
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
     
     @Autowired // serve como construtor para classes que sao interfaces
     private UserRepository userRepository;
@@ -26,6 +34,8 @@ public class UserService {
     @Transactional // usado para funçoes que vao inserir dados no banco de dados, evita erro de enviar somente uma parte das informaçoes
     public User CriarUsuario(User obj){
         obj.setId(null); // evita que o usuario crie um login com id existente e acabe por conseguir alterar o user
+        obj.setPassword(this.bCryptPasswordEncoder.encode(obj.getPassword()));
+        obj.setProfiles(Stream.of(ProfileEnum.USER.getCode()).collect(Collectors.toSet()));
         obj = this.userRepository.save(obj);
         return obj;
     }
@@ -34,6 +44,7 @@ public class UserService {
     public User AtualizarDados(User obj){
         User newObj = BuscarUsuario(obj.getId());
         newObj.setPassword(obj.getPassword());
+        newObj.setPassword(this.bCryptPasswordEncoder.encode(obj.getPassword()));
         return this.userRepository.save(newObj);
     }
 
@@ -42,7 +53,7 @@ public class UserService {
         try {
             this.userRepository.deleteById(id);
         } catch (Exception e) {
-            throw new RuntimeException("nao é possivel excluir pois essa entidade esta relacionada com outras");
+            throw new DataBindingViolationException("nao é possivel excluir pois essa entidade esta relacionada com outras");
         }
     }
 }
